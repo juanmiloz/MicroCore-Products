@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @AllArgsConstructor
@@ -23,7 +24,13 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> details(@PathVariable Long id) {
+    public ResponseEntity<Product> details(@PathVariable Long id) throws InterruptedException {
+        if(id.equals(10L)){
+            throw new IllegalStateException("Error to get the product information");
+        }
+        if(id.equals(7L)){
+            TimeUnit.SECONDS.sleep(5L);
+        }
         Optional<Product> productOptional = productService.findById(id);
 
         if(productOptional.isPresent()) {
